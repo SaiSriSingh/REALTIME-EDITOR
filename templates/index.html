@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-time Editor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div id="editor-container">
+        <input type="text" id="doc-name" placeholder="Enter document name">
+        <button onclick="loadDoc()">Load</button>
+        <button onclick="saveDoc()">Save</button>
+        <textarea id="editor" placeholder="Start typing..."></textarea>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const socket = io();
+        const editor = document.getElementById('editor');
+        const docNameInput = document.getElementById('doc-name');
+        const statusDiv = document.getElementById('status');
+
+        editor.addEventListener('input', () => {
+            const content = editor.value;
+            socket.emit('edit', { content });
+        });
+
+        socket.on('edit', (data) => {
+            editor.value = data.content;
+        });
+
+        function loadDoc() {
+            const name = docNameInput.value;
+            fetch('/load_document', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `name=${encodeURIComponent(name)}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                editor.value = data.content;
+                statusDiv.innerText = "Document loaded.";
+            })
+            .catch(() => {
+                statusDiv.innerText = "Error loading document.";
+            });
+        }
+
+        function saveDoc() {
+            const name = docNameInput.value;
+            const content = editor.value;
+            fetch('/save_document', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `name=${encodeURIComponent(name)}&content=${encodeURIComponent(content)}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                statusDiv.innerText = data.message;
+            })
+            .catch(() => {
+                statusDiv.innerText = "Error saving document.";
+            });
+        }
+    </script>
+</body>
+</html>
