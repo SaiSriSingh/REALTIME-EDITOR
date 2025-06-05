@@ -23,4 +23,7 @@ This ensures that any edits made are not lost when the server is restarted.
 When users open the editor, the last saved version of the document is loaded from the database.
 Any new changes are also saved automatically as users type.
 #OUTPUT :
-
+![Image](https://github.com/user-attachments/assets/8e7e46a2-ef56-4e2e-8500-6591129fa6d7)
+![Image](https://github.com/user-attachments/assets/210755b5-32cb-4b90-bfe8-12928701f0c2)
+![Image](https://github.com/user-attachments/assets/6ea87ea3-eeb3-461a-bdac-de249b9f5ba0)
+![Image](https://github.com/user-attachments/assets/0dfeecd9-ba9d-4518-a234-6dd0249ab03b)
